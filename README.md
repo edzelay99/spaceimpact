@@ -67,3 +67,19 @@ El pulgar izquierdo controla un joystick circular transparente con movimiento de
 Entrada móvil independiente: `jugar-joystick-5.html`; la dirección anterior `jugar-movil-4.html` también contiene la actualización. Ambas incluyen los estilos y el código para funcionar sin recursos adicionales. Al modificar el juego deben regenerarse desde los tres archivos principales.
 
 Validación: movimiento diagonal sin exceso de velocidad, disparo simultáneo, velocidad intermedia, zona muerta, cancelación y liberación, ajuste horizontal y regresión de combate en Chromium emulado. Sin errores JavaScript. Pendiente prueba en Safari/iPhone físico.
+
+### HANGAR · 6: naves y poderes
+
+Desde el menú principal pulsa **HANGAR / CAMBIAR NAVE**, elige una nave y pulsa JUGAR. La elección se guarda localmente cuando el navegador permite almacenamiento.
+
+| Nave | Disparo | Velocidad | Poder especial |
+| --- | --- | --- | --- |
+| AX-01 Falcon | Cian, 1 daño | 115 | Sobrecarga: cadencia doble durante 5 segundos; disparos blancos durante el efecto. |
+| NX-02 Nova | Naranja, 2 daño | 105 | Pulso solar: elimina proyectiles hostiles, causa 8 de daño a enemigos y 35 al jefe. |
+| VX-03 Spectre | Violeta, 1 daño | 140 | Velo: barrera de 6 segundos y reparación de 20 puntos, hasta 100. |
+
+Activa el poder con **E** en teclado o **PODER** en celular. Todas las habilidades tienen 12 segundos de recarga; el HUD muestra el nombre y el tiempo restante. Los disparos dobles y triples conservan el color y daño de la nave seleccionada. Las naves tienen siluetas y paletas diferentes y están disponibles sin desbloqueos.
+
+La entrada independiente actual es `jugar-hangar-6.html`. Las dos entradas móviles anteriores también se actualizaron. Las definiciones están en `SHIPS` y los poderes en `Player.activatePower`.
+
+Validación automatizada en Chromium: selección desde el hangar, persistencia tras recargar, color y daño de las tres armas, activación y bloqueo durante recarga, sobrecarga, pulso contra enemigos/proyectiles/jefe, barrera y reparación, reinicio por nave. Además pasaron las pruebas de joystick, rotación, combate, vidas, mejoras, victoria y Game Over. No se observaron errores JavaScript. Pendiente probar en Safari de un iPhone físico.
