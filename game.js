@@ -62,7 +62,7 @@ class UI{
 class Game{
  constructor(){this.keys=new Set();this.touchKeys=new Set();this.audio=new AudioManager();this.background=new Background();this.best=0;try{this.best=Number(localStorage.getItem('galaxy-impact-best'))||0;}catch{}this.state='MENU';this.reset();this.ui=new UI(this);this.ui.show('MENU');
  window.addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Escape'].includes(e.code))e.preventDefault();this.keys.add(e.code);if(e.repeat)return;if(e.code==='Enter'&&['MENU','GAME_OVER','VICTORY'].includes(this.state)){this.audio.unlock();this.start();}if(['KeyP','Escape'].includes(e.code))this.pause();});window.addEventListener('keyup',e=>this.keys.delete(e.code));window.addEventListener('blur',()=>{this.keys.clear();if(this.state==='PLAYING')this.pause();});
- document.getElementById('sound').onclick=()=>{this.audio.unlock();this.audio.muted=!this.audio.muted;document.getElementById('sound').textContent='SONIDO: '+(this.audio.muted?'OFF':'ON');};this.setupTouch();
+ document.getElementById('sound').onclick=()=>{this.audio.unlock();this.audio.muted=!this.audio.muted;document.getElementById('sound').textContent='SONIDO: '+(this.audio.muted?'OFF':'ON');};this.setupTouch();this.setupMobileLayout();
  const fullscreen=document.getElementById('fullscreen');
  fullscreen.hidden=!document.documentElement.requestFullscreen;
  fullscreen.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{fullscreen.textContent='PANTALLA NO DISPONIBLE';}};
@@ -70,6 +70,26 @@ class Game{
  this.last=0;requestAnimationFrame(t=>this.frame(t));}
  reset(){this.player=new Player();this.enemies=[];this.obstacles=[];this.bullets=[];this.particles=[];this.powerups=[];this.boss=null;this.elapsed=0;this.score=0;this.wave=2;this.shake=0;this.kills=0;this.deathTimer=0;this.warning=false;}
  pressed(code){return this.keys.has(code)||this.touchKeys.has(code);}
+ setupMobileLayout(){
+  const root=document.documentElement,toggle=document.getElementById('touch-mode');
+  let manual=null;
+  const sync=()=>{
+   const viewport=window.visualViewport;
+   root.style.setProperty('--screen-width',(viewport?.width||innerWidth)+'px');
+   root.style.setProperty('--screen-height',(viewport?.height||innerHeight)+'px');
+   const detected=navigator.maxTouchPoints>0||matchMedia('(any-pointer: coarse)').matches||Math.min(innerWidth,innerHeight)<=600;
+   const enabled=manual??detected;
+   root.classList.toggle('mobile-mode',enabled);
+   toggle.setAttribute('aria-pressed',String(enabled));
+   toggle.textContent=enabled?'CONTROLES TÁCTILES: ON':'ACTIVAR CONTROLES TÁCTILES';
+  };
+  toggle.onclick=()=>{manual=!root.classList.contains('mobile-mode');this.clearTouch();sync();};
+  window.addEventListener('touchstart',()=>{if(manual===null){manual=true;sync();}},{once:true,passive:true});
+  window.addEventListener('resize',sync);
+  window.addEventListener('orientationchange',()=>{sync();setTimeout(sync,250);});
+  window.visualViewport?.addEventListener('resize',sync);
+  sync();
+ }
  setupTouch(){
   const pointers=new Map();
   const refresh=()=>{this.touchKeys.clear();for(const {button,key} of pointers.values())this.touchKeys.add(key);document.querySelectorAll('[data-key]').forEach(b=>b.classList.toggle('held',this.touchKeys.has(b.dataset.key)));};

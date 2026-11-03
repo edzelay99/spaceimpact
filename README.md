@@ -51,3 +51,11 @@ Se comprobó la sintaxis con `node --check game.js`. Se ejecutó Chromium con Pl
 Las pruebas de fases tardías avanzaron el reloj y prepararon situaciones de combate de forma controlada; no equivalen a completar manualmente una partida de varios minutos ni a medir 60 FPS. Se revisó visualmente una captura del menú. La política del Chromium administrado bloqueó las URL `file:`: por eso la ejecución directa local está implementada sin módulos ni peticiones de recursos remotos, pero no pudo comprobarse en este entorno. Opera, Edge y la reproducción audible necesitan comprobación manual.
 
 Actualización de adaptación móvil: controles superpuestos semitransparentes, área con altura dinámica `100dvh`, ajuste sin deformar mediante `object-fit: contain` y márgenes seguros para recortes de pantalla. Verificado en Chromium móvil emulado: escenario de 844 × 390 tras rotación, botones con alfa 0,333, entradas multitáctiles y regresión de combate. No comprobado en teléfonos físicos.
+
+### Safari en iPhone: versión MÓVIL · 4
+
+La detección utiliza capacidad táctil, dimensiones de ventana y un botón manual **ACTIVAR CONTROLES TÁCTILES**. La ventana se mide también con `visualViewport` para adaptarse a la rotación y las barras de Safari. Los recursos CSS y JavaScript están versionados para evitar combinaciones antiguas en caché. En el menú los controles se muestran atenuados; se activan al iniciar la partida.
+
+Si Safari no gira, desactiva el bloqueo de orientación del Centro de control del iPhone y gira físicamente el teléfono. El juego no puede anular ese bloqueo. El modo de pantalla completa depende de la versión de Safari; no es necesario para usar los controles ni para ajustar el escenario al área disponible.
+
+Validado en Chromium con dimensiones de iPhone 11 Pro (375 × 812 y 812 × 375), entradas simultáneas y regresión de combate. Safari/WebKit y un iPhone físico no están disponibles en este entorno; se requiere confirmación en el dispositivo.

@@ -2,24 +2,15 @@
 
 /* Overlay controls use independent pointer targets for simultaneous touches. */
 .touch-controls,.mobile-tip,#fullscreen{display:none}
-@media (any-pointer:coarse){
- html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
- header,.eyebrow,footer,.note,.mobile-tip{display:none}
- main{position:fixed;inset:0;margin:0;padding:0;max-width:none;height:100%;height:100dvh}
- .viewport{width:100%;height:100%;aspect-ratio:auto;border:0;box-shadow:none;background:#070e1a;touch-action:none}
- canvas{width:100%;height:100%;object-fit:contain}
- #overlay{z-index:30;overflow:auto;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
- .panel{padding:12px 0}.tag,.subtitle{margin:8px 0;font-size:10px;letter-spacing:2px}.story{font-size:11px;line-height:1.5;margin:10px auto}h1{font-size:clamp(36px,8vw,64px);letter-spacing:-1px}h2{font-size:28px;margin:12px 0}.panel button{min-height:44px;padding:10px 14px;font-size:11px}#help:empty{display:none}
- #sound,#fullscreen{z-index:40;top:max(46px,env(safe-area-inset-top));bottom:auto;min-height:36px;padding:8px;font-size:8px;background:#102b3b99;border-color:#9bd7e66b}
- #sound{right:max(8px,env(safe-area-inset-right))}#fullscreen{display:block;position:absolute;left:max(8px,env(safe-area-inset-left));margin:0}
- #fullscreen[hidden]{display:none}
- .touch-controls{position:absolute;inset:0;z-index:20;display:block;pointer-events:none;user-select:none;-webkit-user-select:none}
- .touch-controls button{pointer-events:auto;touch-action:none;-webkit-touch-callout:none;min-width:44px;min-height:44px;margin:0;padding:7px;font-size:11px;letter-spacing:0;color:#e2ffffc9;background:#16384b55;border:1px solid #c4ffff66;border-radius:12px;outline:none}
- .touch-controls button.held{background:#75f3d288;color:#fff;border-color:#c5fff3;box-shadow:0 0 15px #75f3d244}
- .direction-pad{position:absolute;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,clamp(44px,7vw,58px));grid-template-rows:repeat(2,clamp(44px,7vw,58px));gap:4px}
- .direction-pad button:first-child{grid-column:2}.direction-pad button:nth-child(2){grid-row:2;grid-column:1}.direction-pad button:nth-child(3){grid-row:2;grid-column:2}.direction-pad button:nth-child(4){grid-row:2;grid-column:3}
- .touch-actions{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(2,clamp(60px,10vw,86px));gap:6px;align-items:end}
- .touch-actions .fire{grid-column:1/3;min-height:58px;background:#3d9c9e55;border-radius:20px}
- body:not([data-state="PLAYING"]) .touch-controls{display:none}
-}
-@media (any-pointer:coarse) and (orientation:landscape) and (max-height:400px){.panel{padding:5px 0}.tag,.subtitle{margin:5px 0}.story{margin:6px auto}h1{font-size:38px}.panel button{padding:8px 12px}}
+html.mobile-mode,html.mobile-mode body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}html.mobile-mode header,html.mobile-mode .eyebrow,html.mobile-mode footer,html.mobile-mode .note,html.mobile-mode .mobile-tip{display:none}html.mobile-mode main{position:fixed;inset:0;margin:0;padding:0;max-width:none;height:100%;height:100dvh}html.mobile-mode .viewport{width:100%;height:100%;aspect-ratio:auto;border:0;box-shadow:none;background:#070e1a;touch-action:none}html.mobile-mode canvas{width:100%;height:100%;object-fit:contain}html.mobile-mode #overlay{z-index:30;overflow:auto;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}html.mobile-mode .panel{padding:12px 0}html.mobile-mode .tag,html.mobile-mode .subtitle{margin:8px 0;font-size:10px;letter-spacing:2px}html.mobile-mode .story{font-size:11px;line-height:1.5;margin:10px auto}html.mobile-mode h1{font-size:clamp(36px,8vw,64px);letter-spacing:-1px}html.mobile-mode h2{font-size:28px;margin:12px 0}html.mobile-mode .panel button{min-height:44px;padding:10px 14px;font-size:11px}html.mobile-mode #help:empty{display:none}html.mobile-mode #sound,html.mobile-mode #fullscreen{z-index:40;top:max(46px,env(safe-area-inset-top));bottom:auto;min-height:36px;padding:8px;font-size:8px;background:#102b3b99;border-color:#9bd7e66b}html.mobile-mode #sound{right:max(8px,env(safe-area-inset-right))}html.mobile-mode #fullscreen{display:block;position:absolute;left:max(8px,env(safe-area-inset-left));margin:0}html.mobile-mode #fullscreen[hidden]{display:none}html.mobile-mode .touch-controls{position:absolute;inset:0;z-index:20;display:block;pointer-events:none;user-select:none;-webkit-user-select:none}html.mobile-mode .touch-controls button{pointer-events:auto;touch-action:none;-webkit-touch-callout:none;min-width:44px;min-height:44px;margin:0;padding:7px;font-size:11px;letter-spacing:0;color:#e2ffffc9;background:#16384b55;border:1px solid #c4ffff66;border-radius:12px;outline:none}html.mobile-mode .touch-controls button.held{background:#75f3d288;color:#fff;border-color:#c5fff3;box-shadow:0 0 15px #75f3d244}html.mobile-mode .direction-pad{position:absolute;left:max(12px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,clamp(44px,7vw,58px));grid-template-rows:repeat(2,clamp(44px,7vw,58px));gap:4px}html.mobile-mode .direction-pad button:first-child{grid-column:2}html.mobile-mode .direction-pad button:nth-child(2){grid-row:2;grid-column:1}html.mobile-mode .direction-pad button:nth-child(3){grid-row:2;grid-column:2}html.mobile-mode .direction-pad button:nth-child(4){grid-row:2;grid-column:3}html.mobile-mode .touch-actions{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(2,clamp(60px,10vw,86px));gap:6px;align-items:end}html.mobile-mode .touch-actions .fire{grid-column:1/3;min-height:58px;background:#3d9c9e55;border-radius:20px}html.mobile-mode body:not([data-state="PLAYING"]) .touch-controls{display:none}
+
+@media (orientation:landscape) and (max-height:400px){.panel{padding:5px 0}.tag,.subtitle{margin:5px 0}.story{margin:6px auto}h1{font-size:38px}.panel button{padding:8px 12px}}
+
+/* Explicit mode is available even when a phone reports a desktop pointer. */
+#touch-mode{position:fixed;right:8px;bottom:8px;z-index:60;font-size:9px;min-height:36px;margin:0;padding:8px;background:#102b3bcc}
+#build-version{position:fixed;left:8px;bottom:8px;z-index:60;font-size:8px;color:#b6d1db;pointer-events:none}
+html.mobile-mode main{height:var(--screen-height,100dvh);width:var(--screen-width,100vw);inset:0 auto auto 0}
+html.mobile-mode #touch-mode{right:max(8px,env(safe-area-inset-right));bottom:auto;top:max(6px,env(safe-area-inset-top));min-height:30px;font-size:8px;padding:6px}
+html.mobile-mode #build-version{left:50%;transform:translateX(-50%);bottom:4px}
+html.mobile-mode body:not([data-state="PLAYING"]) .touch-controls{display:block;opacity:.3}
+html.mobile-mode body:not([data-state="PLAYING"]) .touch-controls button{pointer-events:none}
