@@ -52,7 +52,7 @@ class Background{
  for(let i=0;i<23;i++)rect(((i*67-t*(12+i%3))%490+490)%490,35+(i*37)%204,1,1,'#bcfff3');}}
 class UI{
  constructor(g){this.g=g;this.overlay=document.getElementById('overlay');}
- show(state){const g=this.g;this.overlay.classList.toggle('hidden',state==='PLAYING');if(state==='PLAYING')return;
+ show(state){document.body.dataset.state=state;const g=this.g;this.overlay.classList.toggle('hidden',state==='PLAYING');if(state==='PLAYING')return;
  const menu=state==='MENU',paused=state==='PAUSED';this.overlay.innerHTML=`<div class="panel"><p class="tag">${menu?'PLANETA 01 / AETHER':paused?'SISTEMA EN ESPERA':'MISIÓN / AETHER'}</p>${menu?'<h1>GALAXY<br><em>IMPACT</em></h1><p class="subtitle">DEFEND THE GALAXY</p>':`<h2>${paused?'PAUSA':state==='VICTORY'?'AETHER LIBERADO':'GAME OVER'}</h2>`}<p class="story">${menu?'OMEGA ha tomado el planeta.<br>Pilota la AX–01 FALCON. Recupera nuestro futuro.':paused?'La galaxia puede esperar un momento.':`PUNTUACIÓN ${String(g.score).padStart(6,'0')} · RÉCORD ${g.best}`}</p><button class="primary" id="start">${menu?'INICIAR JUEGO →':paused?'CONTINUAR →':'REINTENTAR →'}</button><button id="secondary">${menu?'CONTROLES':'VOLVER AL MENÚ'}</button><p class="story" id="help"></p></div>`;
  document.getElementById('start').onclick=()=>{g.audio.unlock();if(paused){g.state='PLAYING';this.show(g.state);}else g.start();};document.getElementById('secondary').onclick=()=>{if(menu)document.getElementById('help').textContent='Teclado: WASD / flechas, Espacio, Shift y P. Celular: flechas táctiles + DISPARAR; IMPULSO y Ⅱ para pausar. · Enter: iniciar';else{g.state='MENU';this.show('MENU');}};}
  draw(){const g=this.g,p=g.player;if(g.state==='MENU')return;rect(0,0,W,30,'#071a2be8');label('ESCUDO',10,10,'#82b6c9',6);rect(10,15,70,4,'#2d4256');rect(10,15,70*p.shield/100,4,'#79f4ce');label('VIDAS '+p.lives,90,17);label(String(g.score).padStart(6,'0'),190,17,'#fff',10);label('RÉCORD '+g.best,280,17,'#9ec4d1');label('AETHER',427,12,'#8eead9',6);rect(0,28,W*Math.min(1,g.elapsed/150),2,'#62dacb');label(g.elapsed<60?'01 / LLEGADA':g.elapsed<150?'02 / INVASIÓN':'03 / DESTRUCTOR OMEGA',10,40,'#d3f7f0',6);
@@ -62,7 +62,12 @@ class UI{
 class Game{
  constructor(){this.keys=new Set();this.touchKeys=new Set();this.audio=new AudioManager();this.background=new Background();this.best=0;try{this.best=Number(localStorage.getItem('galaxy-impact-best'))||0;}catch{}this.state='MENU';this.reset();this.ui=new UI(this);this.ui.show('MENU');
  window.addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Escape'].includes(e.code))e.preventDefault();this.keys.add(e.code);if(e.repeat)return;if(e.code==='Enter'&&['MENU','GAME_OVER','VICTORY'].includes(this.state)){this.audio.unlock();this.start();}if(['KeyP','Escape'].includes(e.code))this.pause();});window.addEventListener('keyup',e=>this.keys.delete(e.code));window.addEventListener('blur',()=>{this.keys.clear();if(this.state==='PLAYING')this.pause();});
- document.getElementById('sound').onclick=()=>{this.audio.unlock();this.audio.muted=!this.audio.muted;document.getElementById('sound').textContent='SONIDO: '+(this.audio.muted?'OFF':'ON');};this.setupTouch();this.last=0;requestAnimationFrame(t=>this.frame(t));}
+ document.getElementById('sound').onclick=()=>{this.audio.unlock();this.audio.muted=!this.audio.muted;document.getElementById('sound').textContent='SONIDO: '+(this.audio.muted?'OFF':'ON');};this.setupTouch();
+ const fullscreen=document.getElementById('fullscreen');
+ fullscreen.hidden=!document.documentElement.requestFullscreen;
+ fullscreen.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{fullscreen.textContent='PANTALLA NO DISPONIBLE';}};
+ document.addEventListener('fullscreenchange',()=>{fullscreen.textContent=document.fullscreenElement?'SALIR DE PANTALLA':'⛶ PANTALLA';});
+ this.last=0;requestAnimationFrame(t=>this.frame(t));}
  reset(){this.player=new Player();this.enemies=[];this.obstacles=[];this.bullets=[];this.particles=[];this.powerups=[];this.boss=null;this.elapsed=0;this.score=0;this.wave=2;this.shake=0;this.kills=0;this.deathTimer=0;this.warning=false;}
  pressed(code){return this.keys.has(code)||this.touchKeys.has(code);}
  setupTouch(){
