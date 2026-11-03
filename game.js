@@ -19,8 +19,9 @@ class Player{
  constructor(){Object.assign(this,{x:65,y:130,w:24,h:14,speed:115,shield:100,lives:3,inv:2,cool:0,dash:0,dashTime:0,weapon:0,weaponTime:0,barrier:0});}
  update(dt,g){for(const k of ['inv','cool','dash','dashTime','weaponTime','barrier'])this[k]=Math.max(0,this[k]-dt);if(!this.weaponTime)this.weapon=0;
  let dx=+(g.pressed('KeyD')||g.pressed('ArrowRight'))-+(g.pressed('KeyA')||g.pressed('ArrowLeft')),dy=+(g.pressed('KeyS')||g.pressed('ArrowDown'))-+(g.pressed('KeyW')||g.pressed('ArrowUp'));
+ if(g.stick.x||g.stick.y){dx=g.stick.x;dy=g.stick.y;}
  if((g.pressed('ShiftLeft')||g.pressed('ShiftRight'))&&!this.dash){this.dash=3;this.dashTime=.2;g.burst(this.x-12,this.y,'#7dfaff',8);}
- const norm=Math.hypot(dx,dy)||1,s=this.speed*(this.dashTime?2.8:1);this.x=clamp(this.x+dx/norm*s*dt,18,450);this.y=clamp(this.y+dy/norm*s*dt,39,235);
+ const norm=Math.max(1,Math.hypot(dx,dy)),s=this.speed*(this.dashTime?2.8:1);this.x=clamp(this.x+dx/norm*s*dt,18,450);this.y=clamp(this.y+dy/norm*s*dt,39,235);
  if(g.pressed('Space')&&!this.cool){this.cool=.16;const angles=this.weapon===2?[-.23,0,.23]:this.weapon===1?[0,0]:[0];angles.forEach((a,i)=>g.bullets.push(new Bullet(this.x+16,this.y+(this.weapon===1?(i?4:-4):0),260*Math.cos(a),260*Math.sin(a))));g.audio.play('laser');}}
  damage(n,g){if(this.inv||this.barrier||g.state!=='PLAYING')return;this.shield-=n;this.inv=1.4;g.shake=4;g.audio.play('hurt');g.burst(this.x,this.y,'#75dfff',15);if(this.shield<=0){this.lives--;if(this.lives<=0){this.shield=0;g.end(false);return;}this.shield=100;this.x=65;this.y=130;this.inv=3;}}
  draw(t){if(this.inv&&Math.floor(t*14)%2)return;const x=this.x,y=this.y;rect(x-23,y-3,rand(7,13),6,'#42cfec');rect(x-19,y-1,10,2,'#f8fbc1');rect(x-11,y-5,22,10,'#267cae');rect(x-5,y-9,9,18,'#25476c');rect(x-2,y-7,9,14,'#468bd0');rect(x,y-4,15,8,'#7bd9ed');rect(x+5,y-3,7,3,'#dbffff');rect(x+13,y-1,5,2,'#e8fcff');rect(x-10,y+4,7,2,'#152b50');if(this.barrier){ctx.strokeStyle='#87ffe4';ctx.beginPath();ctx.arc(x,y,23,0,Math.PI*2);ctx.stroke();}}
@@ -54,13 +55,13 @@ class UI{
  constructor(g){this.g=g;this.overlay=document.getElementById('overlay');}
  show(state){document.body.dataset.state=state;const g=this.g;this.overlay.classList.toggle('hidden',state==='PLAYING');if(state==='PLAYING')return;
  const menu=state==='MENU',paused=state==='PAUSED';this.overlay.innerHTML=`<div class="panel"><p class="tag">${menu?'PLANETA 01 / AETHER':paused?'SISTEMA EN ESPERA':'MISIÓN / AETHER'}</p>${menu?'<h1>GALAXY<br><em>IMPACT</em></h1><p class="subtitle">DEFEND THE GALAXY</p>':`<h2>${paused?'PAUSA':state==='VICTORY'?'AETHER LIBERADO':'GAME OVER'}</h2>`}<p class="story">${menu?'OMEGA ha tomado el planeta.<br>Pilota la AX–01 FALCON. Recupera nuestro futuro.':paused?'La galaxia puede esperar un momento.':`PUNTUACIÓN ${String(g.score).padStart(6,'0')} · RÉCORD ${g.best}`}</p><button class="primary" id="start">${menu?'INICIAR JUEGO →':paused?'CONTINUAR →':'REINTENTAR →'}</button><button id="secondary">${menu?'CONTROLES':'VOLVER AL MENÚ'}</button><p class="story" id="help"></p></div>`;
- document.getElementById('start').onclick=()=>{g.audio.unlock();if(paused){g.state='PLAYING';this.show(g.state);}else g.start();};document.getElementById('secondary').onclick=()=>{if(menu)document.getElementById('help').textContent='Teclado: WASD / flechas, Espacio, Shift y P. Celular: flechas táctiles + DISPARAR; IMPULSO y Ⅱ para pausar. · Enter: iniciar';else{g.state='MENU';this.show('MENU');}};}
+ document.getElementById('start').onclick=()=>{g.audio.unlock();if(paused){g.state='PLAYING';this.show(g.state);}else g.start();};document.getElementById('secondary').onclick=()=>{if(menu)document.getElementById('help').textContent='Teclado: WASD / flechas, Espacio, Shift y P. Celular: joystick analógico + DISPARAR; IMPULSO y Ⅱ para pausar. · Enter: iniciar';else{g.state='MENU';this.show('MENU');}};}
  draw(){const g=this.g,p=g.player;if(g.state==='MENU')return;rect(0,0,W,30,'#071a2be8');label('ESCUDO',10,10,'#82b6c9',6);rect(10,15,70,4,'#2d4256');rect(10,15,70*p.shield/100,4,'#79f4ce');label('VIDAS '+p.lives,90,17);label(String(g.score).padStart(6,'0'),190,17,'#fff',10);label('RÉCORD '+g.best,280,17,'#9ec4d1');label('AETHER',427,12,'#8eead9',6);rect(0,28,W*Math.min(1,g.elapsed/150),2,'#62dacb');label(g.elapsed<60?'01 / LLEGADA':g.elapsed<150?'02 / INVASIÓN':'03 / DESTRUCTOR OMEGA',10,40,'#d3f7f0',6);
  if(p.weaponTime)label(['','DOBLE','TRIPLE'][p.weapon]+' '+Math.ceil(p.weaponTime)+'s',10,238,'#e1beff');if(p.barrier)label('BARRERA '+Math.ceil(p.barrier)+'s',110,238,'#8cffde');label(p.dash?'IMPULSO '+p.dash.toFixed(1)+'s':'IMPULSO LISTO',10,263,'#9bd8e5',6);
  if(g.boss){rect(145,44,190,5,'#263249');rect(145,44,190*g.boss.hp/g.boss.maxHp,5,'#ff6583');label('DESTRUCTOR OMEGA',190,41,'#ffbdc8',6);}if(g.elapsed>=150&&g.elapsed<155){rect(30,107,420,37,'#32162b');label('WARNING — OMEGA SIGNATURE DETECTED',49,130,'#ffb1b1',10);}}
 }
 class Game{
- constructor(){this.keys=new Set();this.touchKeys=new Set();this.audio=new AudioManager();this.background=new Background();this.best=0;try{this.best=Number(localStorage.getItem('galaxy-impact-best'))||0;}catch{}this.state='MENU';this.reset();this.ui=new UI(this);this.ui.show('MENU');
+ constructor(){this.keys=new Set();this.touchKeys=new Set();this.stick={x:0,y:0};this.audio=new AudioManager();this.background=new Background();this.best=0;try{this.best=Number(localStorage.getItem('galaxy-impact-best'))||0;}catch{}this.state='MENU';this.reset();this.ui=new UI(this);this.ui.show('MENU');
  window.addEventListener('keydown',e=>{if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Escape'].includes(e.code))e.preventDefault();this.keys.add(e.code);if(e.repeat)return;if(e.code==='Enter'&&['MENU','GAME_OVER','VICTORY'].includes(this.state)){this.audio.unlock();this.start();}if(['KeyP','Escape'].includes(e.code))this.pause();});window.addEventListener('keyup',e=>this.keys.delete(e.code));window.addEventListener('blur',()=>{this.keys.clear();if(this.state==='PLAYING')this.pause();});
  document.getElementById('sound').onclick=()=>{this.audio.unlock();this.audio.muted=!this.audio.muted;document.getElementById('sound').textContent='SONIDO: '+(this.audio.muted?'OFF':'ON');};this.setupTouch();this.setupMobileLayout();
  const fullscreen=document.getElementById('fullscreen');
@@ -93,7 +94,22 @@ class Game{
  setupTouch(){
   const pointers=new Map();
   const refresh=()=>{this.touchKeys.clear();for(const {button,key} of pointers.values())this.touchKeys.add(key);document.querySelectorAll('[data-key]').forEach(b=>b.classList.toggle('held',this.touchKeys.has(b.dataset.key)));};
-  this.clearTouch=()=>{pointers.clear();refresh();};
+  // Capture one thumb; keep action-button pointers independent.
+  const stick=document.getElementById('joystick');let stickPointer=null;
+  const resetStick=()=>{stickPointer=null;this.stick.x=0;this.stick.y=0;stick.classList.remove('active');stick.style.setProperty('--stick-x','0px');stick.style.setProperty('--stick-y','0px');};
+  const moveStick=e=>{
+   const box=stick.getBoundingClientRect(),radius=box.width*.28;
+   let x=(e.clientX-box.left-box.width/2)/radius,y=(e.clientY-box.top-box.height/2)/radius;
+   const distance=Math.hypot(x,y),scale=Math.max(1,distance);x/=scale;y/=scale;
+   const strength=clamp((Math.min(distance,1)-.12)/.88,0,1),angle=Math.atan2(y,x);
+   this.stick.x=Math.cos(angle)*strength;this.stick.y=Math.sin(angle)*strength;
+   stick.style.setProperty('--stick-x',x*radius+'px');stick.style.setProperty('--stick-y',y*radius+'px');
+  };
+  stick.addEventListener('pointerdown',e=>{e.preventDefault();if(this.state!=='PLAYING'||stickPointer!==null)return;stickPointer=e.pointerId;stick.setPointerCapture(e.pointerId);stick.classList.add('active');moveStick(e);});
+  stick.addEventListener('pointermove',e=>{if(e.pointerId===stickPointer){e.preventDefault();moveStick(e);}});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])stick.addEventListener(event,e=>{if(e.pointerId===stickPointer)resetStick();});
+  stick.addEventListener('contextmenu',e=>e.preventDefault());
+  this.clearTouch=()=>{pointers.clear();resetStick();refresh();};
   document.querySelectorAll('[data-key]').forEach(button=>{
    button.addEventListener('pointerdown',e=>{e.preventDefault();if(this.state!=='PLAYING')return;this.audio.unlock();if(button.dataset.key==='ShiftLeft'&&!this.player.dash){this.player.dash=3;this.player.dashTime=.2;this.burst(this.player.x-12,this.player.y,'#7dfaff',8);}button.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{button,key:button.dataset.key});refresh();});
    const release=e=>{pointers.delete(e.pointerId);refresh();};

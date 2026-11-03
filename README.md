@@ -15,7 +15,7 @@ Descarga y descomprime los archivos en una misma carpeta. Abre `index.html` con 
 
 ## Celulares
 
-Abre el enlace de GitHub Pages en el navegador del teléfono. Los dispositivos táctiles muestran flechas de dirección, DISPARAR, IMPULSO y PAUSA superpuestos al escenario, con fondos transparentes. Mantén una dirección y DISPARAR con dos dedos para moverte y atacar simultáneamente. El escenario se adapta automáticamente al ancho y alto disponibles al girar el celular, conserva la proporción 16:9 y utiliza bandas cuando la pantalla tiene otra proporción. Recomendado: orientación horizontal. El botón PANTALLA activa pantalla completa cuando el navegador lo admite; en otros navegadores se aprovecha el espacio disponible sin ocultar sus barras. Al girar el celular o cambiar de aplicación, la partida se pausa; pulsa CONTINUAR. No es necesario instalar una aplicación.
+Abre el enlace de GitHub Pages en el navegador del teléfono. Los dispositivos táctiles muestran joystick analógico, DISPARAR, IMPULSO y PAUSA superpuestos al escenario, con fondos transparentes. Arrastra el joystick y mantén DISPARAR con dos dedos para moverte y atacar simultáneamente. El escenario se adapta automáticamente al ancho y alto disponibles al girar el celular, conserva la proporción 16:9 y utiliza bandas cuando la pantalla tiene otra proporción. Recomendado: orientación horizontal. El botón PANTALLA activa pantalla completa cuando el navegador lo admite; en otros navegadores se aprovecha el espacio disponible sin ocultar sus barras. Al girar el celular o cambiar de aplicación, la partida se pausa; pulsa CONTINUAR. No es necesario instalar una aplicación.
 
 Validación adicional: Chromium con emulación táctil a 390 × 844 y 844 × 390; movimiento y disparo simultáneos, liberación de botones, toque breve del impulso, pausa y continuación, ausencia de desplazamiento al tocar y controles dentro de la pantalla horizontal. Sin errores de JavaScript. Pendiente comprobar en dispositivos físicos Android/iPhone.
 
@@ -59,3 +59,11 @@ La detección utiliza capacidad táctil, dimensiones de ventana y un botón manu
 Si Safari no gira, desactiva el bloqueo de orientación del Centro de control del iPhone y gira físicamente el teléfono. El juego no puede anular ese bloqueo. El modo de pantalla completa depende de la versión de Safari; no es necesario para usar los controles ni para ajustar el escenario al área disponible.
 
 Validado en Chromium con dimensiones de iPhone 11 Pro (375 × 812 y 812 × 375), entradas simultáneas y regresión de combate. Safari/WebKit y un iPhone físico no están disponibles en este entorno; se requiere confirmación en el dispositivo.
+
+### JOYSTICK · 5
+
+El pulgar izquierdo controla un joystick circular transparente con movimiento de 360 grados. Un desplazamiento pequeño mueve lentamente; llevar la palanca al borde alcanza la velocidad máxima. La zona muerta central evita movimientos accidentales. Soltar o cancelar el toque, pausar y girar la pantalla centran la palanca. Con otro dedo puedes disparar o activar el impulso. El teclado conserva su funcionamiento.
+
+Entrada móvil independiente: `jugar-joystick-5.html`; la dirección anterior `jugar-movil-4.html` también contiene la actualización. Ambas incluyen los estilos y el código para funcionar sin recursos adicionales. Al modificar el juego deben regenerarse desde los tres archivos principales.
+
+Validación: movimiento diagonal sin exceso de velocidad, disparo simultáneo, velocidad intermedia, zona muerta, cancelación y liberación, ajuste horizontal y regresión de combate en Chromium emulado. Sin errores JavaScript. Pendiente prueba en Safari/iPhone físico.
