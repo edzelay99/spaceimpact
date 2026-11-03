@@ -4,7 +4,7 @@ Videojuego arcade horizontal en HTML5 Canvas, JavaScript ES6 y CSS. Sin framewor
 
 ## Jugar
 
-Descarga y descomprime los archivos en una misma carpeta. Abre `index.html` con Chrome, Opera o Edge en una computadora con teclado. Pulsa **INICIAR JUEGO** o **Enter**. No necesitas instalar Node, paquetes ni un servidor.
+Descarga y descomprime los archivos en una misma carpeta. Abre `index.html` con Chrome, Opera o Edge en una computadora o celular. Pulsa **INICIAR JUEGO** o **Enter**. No necesitas instalar Node, paquetes ni un servidor.
 
 - **WASD / flechas:** movimiento diagonal normalizado.
 - **Espacio:** mantener para disparar.
@@ -12,6 +12,12 @@ Descarga y descomprime los archivos en una misma carpeta. Abre `index.html` con 
 - **P / Escape:** pausa y continuación.
 - **Enter:** iniciar o reiniciar después de terminar.
 - **SONIDO:** activar o silenciar los efectos. El audio se habilita tras una interacción.
+
+## Celulares
+
+Abre el enlace de GitHub Pages en el navegador del teléfono. Los dispositivos táctiles muestran flechas de dirección, DISPARAR, IMPULSO y PAUSA debajo del escenario. Mantén una dirección y DISPARAR con dos dedos para moverte y atacar simultáneamente. Recomendado: orientación horizontal. Al girar el celular o cambiar de aplicación, la partida se pausa; pulsa CONTINUAR. No es necesario instalar una aplicación.
+
+Validación adicional: Chromium con emulación táctil a 390 × 844 y 844 × 390; movimiento y disparo simultáneos, liberación de botones, toque breve del impulso, pausa y continuación, ausencia de desplazamiento al tocar y controles dentro de la pantalla horizontal. Sin errores de JavaScript. Pendiente comprobar en dispositivos físicos Android/iPhone.
 
 ## Misión Aether
 
